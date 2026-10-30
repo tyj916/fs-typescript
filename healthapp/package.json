@@ -9,11 +9,13 @@
   "scripts": {
     "calculateBmi": "tsc && node bmiCalculator.ts",
     "calculateExercises": "tsc && node exerciseCalculator.ts",
-    "start": "node index.ts"
+    "start": "node index.ts",
+    "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\""
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.5",
+    "concurrently": "^10.0.6",
     "typescript": "^7.0.2"
   },
   "dependencies": {
