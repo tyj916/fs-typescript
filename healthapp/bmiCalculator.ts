@@ -16,9 +16,9 @@ const parseArguments = (args: string[]): BmiValues => {
     return {
       height,
       weight,
-    }
+    };
   }
-}
+};
 
 export const calculateBmi = (height: number, weight: number) : string => {
   if (height <= 0) throw new Error('Height can\'t be lower than 0');
@@ -45,14 +45,14 @@ export const calculateBmi = (height: number, weight: number) : string => {
     default:
       return 'Obsese (Class III)';
   }
-}
+};
 
 if (process.argv[1] === import.meta.filename) {
   try {
     const { height, weight } = parseArguments(process.argv);
     console.log(calculateBmi(height, weight));
   } catch (error: unknown) {
-    let errorMessage = 'Something went wrong.'
+    let errorMessage = 'Something went wrong.';
     if (error instanceof Error) {
       errorMessage += error.message;
     }

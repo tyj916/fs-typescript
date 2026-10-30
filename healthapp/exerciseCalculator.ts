@@ -15,9 +15,9 @@ const parseArgumentsForExercises = (args: string[]): InputValues => {
     return {
       dailyExerciseHours,
       target,
-    }
+    };
   }
-}
+};
 
 interface Result {
   periodLength: number,
@@ -47,14 +47,14 @@ const calculateExercises = (dailyExerciseHours: number[], target: number): Resul
     ratingDescription,
     target,
     average,
-  }
-}
+  };
+};
 
 try {
   const { target, dailyExerciseHours } = parseArgumentsForExercises(process.argv);
   console.log(calculateExercises(dailyExerciseHours, target));
 } catch (error) {
-  let errorMessage = 'Something went wrong.'
+  let errorMessage = 'Something went wrong.';
   if (error instanceof Error) {
     errorMessage += ` ${error.message}`;
   }
