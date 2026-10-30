@@ -5,13 +5,18 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "calculateBmi": "tsc && node bmiCalculator.ts",
-    "calculateExercises": "tsc && node exerciseCalculator.ts"
+    "calculateExercises": "tsc && node exerciseCalculator.ts",
+    "start": "node index.ts"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^26.6.5",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
   }
 }
