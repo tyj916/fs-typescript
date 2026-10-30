@@ -24,7 +24,8 @@ const calculateBmi = (height: number, weight: number) : string => {
   if (height <= 0) throw new Error('Height can\'t be lower than 0');
   if (weight <= 0) throw new Error('Weight can\'t be lower than 0');
 
-  const bmi = height / weight;
+  const heightInMeters = height / 100;
+  const bmi = weight / (heightInMeters ^ 2);
 
   switch(true) {
     case (bmi < 16):
