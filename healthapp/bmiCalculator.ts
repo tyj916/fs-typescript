@@ -1,4 +1,7 @@
 const calculateBmi = (height: number, weight: number) : string => {
+  if (height <= 0) throw new Error('Height can\'t be lower than 0');
+  if (weight <= 0) throw new Error('Weight can\'t be lower than 0');
+
   const bmi = height / weight;
 
   switch(true) {
@@ -21,4 +24,12 @@ const calculateBmi = (height: number, weight: number) : string => {
   }
 }
 
-console.log(calculateBmi(180, 74));
+try {
+  console.log(calculateBmi(180, 74));
+} catch (error: unknown) {
+  let errorMessage = 'Something went wrong.'
+  if (error instanceof Error) {
+    errorMessage += error.message;
+  }
+  console.log(errorMessage);
+}
