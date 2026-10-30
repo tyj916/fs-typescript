@@ -36,7 +36,7 @@ export const calculateExercises = (dailyExerciseHours: number[], target: number)
   const success = average > target;
   const rating = average - target > 1 ? 3
     : target - average > 1 ? 1 : 2;
-  const ratingDescription = rating === 1 ? 'you need to exercise more'
+  const ratingDescription = rating === 1 ? 'bad'
     : rating === 2 ? 'not too bad but could be better' : 'awesome';
 
   return {
