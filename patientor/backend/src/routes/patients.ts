@@ -1,6 +1,7 @@
 import express, { type Response } from 'express';
 import patientService from '../services/patientService.ts';
 import type { NonSensitivePatientEntry } from '../types.ts';
+import parseNewPatientEntry from '../utils.ts';
 
 const router = express.Router();
 

@@ -48,17 +48,23 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 const parseNewPatientEntry = (object: unknown): NewPatientEntry => {
-  // To be updated
-  console.log(object);
-  const newEntry: NewPatientEntry = {
-    name: 'abc',
-    dateOfBirth: '2026-11-1',
-    ssn: 'abc',
-    gender: 'other',
-    occupation: 'unemployed',
-  };
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data');
+  }
 
-  return newEntry;
+  if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object) {
+    const newEntry: NewPatientEntry = {
+      name: parseName(object.name),
+      dateOfBirth: parseDate(object.dateOfBirth),
+      ssn: parseSsn(object.ssn),
+      gender: parseGender(object.gender),
+      occupation: parseOccupation(object.occupation),
+    };
+  
+    return newEntry;
+  }
+
+  throw new Error('Incorrect data: some fields are missing');
 };
 
 export default parseNewPatientEntry;
