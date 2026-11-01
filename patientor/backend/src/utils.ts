@@ -1,4 +1,4 @@
-import type { Gender, NewPatientEntry } from "./types.ts";
+import { Gender, type NewPatientEntry } from "./types.ts";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -29,8 +29,8 @@ const parseDate = (date: unknown): string => {
   return date;
 };
 
-const isGender = (gender: string): gender is Gender => {
-  return ['male', 'female', 'other'].includes(gender);
+const isGender = (param: string): param is Gender => {
+  return (Object.values(Gender) as string[]).includes(param);
 };
 
 const parseGender = (gender: unknown): Gender => {
