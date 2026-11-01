@@ -18,6 +18,13 @@ const parseSsn = (ssn: unknown): string => {
   return ssn;
 };
 
+const parseOccupation = (occupation: unknown): string => {
+  if (!occupation || !isString(occupation)) {
+    throw new Error('Incorrect or missing occupation');
+  }
+  return occupation;
+};
+
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
