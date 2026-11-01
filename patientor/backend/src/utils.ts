@@ -5,17 +5,6 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
-const isDate = (date: string): boolean => {
-  return Boolean(Date.parse(date));
-};
-
-const parseDate = (date: unknown): string => {
-  if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Incorrect or missing date');
-  }
-  return date;
-};
-
 const isGender = (param: string): param is Gender => {
   return (Object.values(Gender) as string[]).includes(param);
 };
@@ -35,7 +24,7 @@ const parseNewPatientEntry = (object: unknown): NewPatientEntry => {
   if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object) {
     const newEntry: NewPatientEntry = {
       name: z.string().parse(object.name),
-      dateOfBirth: parseDate(object.dateOfBirth),
+      dateOfBirth: z.iso.date().parse(object.dateOfBirth),
       ssn: z.string().parse(object.ssn),
       gender: parseGender(object.gender),
       occupation: z.string().parse(object.occupation),
