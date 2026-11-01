@@ -1,7 +1,7 @@
 import express, { type Response } from 'express';
+import { z } from 'zod';
 import patientService from '../services/patientService.ts';
-import type { NonSensitivePatientEntry } from '../types.ts';
-import parseNewPatientEntry from '../utils.ts';
+import { NewPatientEntrySchema, type NonSensitivePatientEntry } from '../types.ts';
 
 const router = express.Router();
 
@@ -11,15 +11,15 @@ router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
 
 router.post('/', (req, res) => {
   try {
-    const newPatientEntry = parseNewPatientEntry(req.body);
+    const newPatientEntry = NewPatientEntrySchema.parse(req.body);
     const addedPatient = patientService.addPatient(newPatientEntry);
     res.json(addedPatient);
   } catch (error) {
-    let errorMessage = 'Something went wrong.';
-    if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
+    if (error instanceof z.ZodError) {
+      res.status(400).send({ error: error.issues });
+    } else {
+      res.status(400).send({ error: 'unknown error' });
     }
-    res.status(400).send(errorMessage);
   }
 });
 
