@@ -1,4 +1,4 @@
-import type { NewPatientEntry } from "./types.ts";
+import type { Gender, NewPatientEntry } from "./types.ts";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -27,6 +27,17 @@ const parseDate = (date: unknown): string => {
     throw new Error('Incorrect or missing date');
   }
   return date;
+};
+
+const isGender = (gender: string): gender is Gender => {
+  return ['male', 'female', 'other'].includes(gender);
+};
+
+const parseGender = (gender: unknown): Gender => {
+  if (!gender || !isString(gender) || !isGender(gender)) {
+    throw new Error('Incorrect or missing gender');
+  }
+  return gender;
 };
 
 const parseNewPatientEntry = (object: unknown): NewPatientEntry => {
