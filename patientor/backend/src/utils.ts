@@ -18,6 +18,17 @@ const parseSsn = (ssn: unknown): string => {
   return ssn;
 };
 
+const isDate = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
+
+const parseDate = (date: unknown): string => {
+  if (!date || !isString(date) || !isDate(date)) {
+    throw new Error('Incorrect or missing date');
+  }
+  return date;
+};
+
 const parseNewPatientEntry = (object: unknown): NewPatientEntry => {
   // To be updated
   console.log(object);
