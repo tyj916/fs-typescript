@@ -11,6 +11,13 @@ const parseName = (name: unknown): string => {
   return name;
 };
 
+const parseSsn = (ssn: unknown): string => {
+  if (!ssn || !isString(ssn)) {
+    throw new Error('Incorrect or missing ssn');
+  }
+  return ssn;
+};
+
 const parseNewPatientEntry = (object: unknown): NewPatientEntry => {
   // To be updated
   console.log(object);
