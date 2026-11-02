@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import type { Diary } from "./types";
+import type { Diary, NewDiary } from "./types";
 import diaryService from "./services/diary";
+import DiaryForm from "./components/DiaryForm";
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -10,6 +11,13 @@ function App() {
       setDiaries(initialDiaries);
     });
   }, []);
+
+  const createDiary = (object: NewDiary) => {
+    diaryService.create(object)
+      .then(returnedDiary => {
+        setDiaries(diaries.concat(returnedDiary));
+      });
+  }
 
   return (
     <div>
@@ -22,6 +30,8 @@ function App() {
           {diary.comment && <p>Comment: {diary.comment}</p>}
         </div>
       )}
+
+      <DiaryForm createDiary={createDiary} />
     </div>
   )
 }
