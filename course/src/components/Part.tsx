@@ -11,7 +11,7 @@ const PartBase = ({ name, exerciseCount }: CoursePartBase) => {
 const PartWithDescription = ({ name, exerciseCount, description }: CoursePartDescription) => {
   return (<>
     <PartBase name={name} exerciseCount={exerciseCount} />
-    <p>{description}</p>
+    <p><em>{description}</em></p>
   </>)
 }
 
@@ -34,7 +34,7 @@ const Part = ({ part }: PartProps) => {
     case 'group':
       return <div key={part.name}>
         <PartBase name={part.name} exerciseCount={part.exerciseCount} />
-        <p>{part.groupProjectCount}</p>
+        <p>group project count: {part.groupProjectCount}</p>
       </div>
     case 'background':
       return <div key={part.name}>
@@ -43,7 +43,7 @@ const Part = ({ part }: PartProps) => {
           exerciseCount={part.exerciseCount} 
           description={part.description} 
         />
-        <p>{part.backgroundMaterial}</p>
+        <p>background material: {part.backgroundMaterial}</p>
       </div>
     case 'special':
       return <div key={part.name}>
@@ -52,7 +52,7 @@ const Part = ({ part }: PartProps) => {
           exerciseCount={part.exerciseCount} 
           description={part.description} 
         />
-        <p>{part.requirements.join(', ')}</p>
+        <p>required skills: {part.requirements.join(', ')}</p>
       </div>
     default:
       return assertNever(part);
