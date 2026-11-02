@@ -5,6 +5,12 @@ interface ContentProps {
 }
 
 const Content = ({ courseParts }: ContentProps) => {
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
   return (
     <div>
       {courseParts.map(part => {
@@ -22,7 +28,7 @@ const Content = ({ courseParts }: ContentProps) => {
               {part.name} {part.exerciseCount} {part.description} {part.backgroundMaterial}
             </p>
           default:
-            break;
+            return assertNever(part);
         }
       })}
     </div>
