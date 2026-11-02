@@ -1,4 +1,5 @@
 import type { CoursePart } from "../types"
+import Part from "./Part";
 
 interface ContentProps {
   courseParts: CoursePart[]
@@ -16,17 +17,17 @@ const Content = ({ courseParts }: ContentProps) => {
       {courseParts.map(part => {
         switch (part.kind) {
           case 'basic':
-            return <p key={part.name}>
-              {part.name} {part.exerciseCount} {part.description}
-            </p>
+            return <div key={part.name}>
+              <Part part={part} /> {part.description}
+            </div>
           case 'group':
-            return <p key={part.name}>
-              {part.name} {part.exerciseCount} {part.groupProjectCount}
-            </p>
+            return <div key={part.name}>
+              <Part part={part} /> {part.groupProjectCount}
+            </div>
           case 'background':
-            return <p key={part.name}>
-              {part.name} {part.exerciseCount} {part.description} {part.backgroundMaterial}
-            </p>
+            return <div key={part.name}>
+              <Part part={part} /> {part.description} {part.backgroundMaterial}
+            </div>
           default:
             return assertNever(part);
         }
