@@ -22,7 +22,7 @@ const DiaryForm = ({ createDiary }: DiaryFormProps) => {
 
   return (
     <div>
-      <h2>create new</h2>
+      <h2>Add new entry</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Date: <input value={date} onChange={(e) => setDate(e.target.value)} />
