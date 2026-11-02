@@ -11,7 +11,7 @@ const Content = (props: ContentProps) => {
   return (
     <div>
       {props.courseParts.map(course => (
-        <p>{course.name} {course.exerciseCount}</p>
+        <p key={course.name}>{course.name} {course.exerciseCount}</p>
       ))}
     </div>
   )
