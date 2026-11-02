@@ -45,6 +45,15 @@ const Part = ({ part }: PartProps) => {
         />
         <p>{part.backgroundMaterial}</p>
       </div>
+    case 'special':
+      return <div key={part.name}>
+        <PartWithDescription 
+          name={part.name} 
+          exerciseCount={part.exerciseCount} 
+          description={part.description} 
+        />
+        <p>{part.requirements.join(', ')}</p>
+      </div>
     default:
       return assertNever(part);
   }

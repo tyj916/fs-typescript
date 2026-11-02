@@ -16,9 +16,14 @@ interface CoursePartBackground extends CoursePartDescription {
   kind: 'background'
 }
 
+interface CoursePartSpecial extends CoursePartDescription {
+  requirements: string[];
+  kind: 'special'
+}
+
 interface CoursePartGroup extends CoursePartBase {
   groupProjectCount: number;
   kind: 'group'
 }
 
-export type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+export type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
