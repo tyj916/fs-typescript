@@ -1,4 +1,4 @@
-import type { CoursePartBase, CoursePart } from "../types";
+import type { CoursePartBase, CoursePartDescription, CoursePart } from "../types";
 
 interface PartProps {
   part: CoursePart;
@@ -6,6 +6,13 @@ interface PartProps {
 
 const PartBase = ({ name, exerciseCount }: CoursePartBase) => {
   return <p><strong>{name} {exerciseCount}</strong></p>
+}
+
+const PartWithDescription = ({ name, exerciseCount, description }: CoursePartDescription) => {
+  return (<>
+    <PartBase name={name} exerciseCount={exerciseCount} />
+    <p>{description}</p>
+  </>)
 }
 
 const Part = ({ part }: PartProps) => {
@@ -18,8 +25,11 @@ const Part = ({ part }: PartProps) => {
   switch (part.kind) {
     case 'basic':
       return <div key={part.name}>
-        <PartBase name={part.name} exerciseCount={part.exerciseCount} />
-        <p>{part.description}</p>
+        <PartWithDescription 
+          name={part.name} 
+          exerciseCount={part.exerciseCount} 
+          description={part.description} 
+        />
       </div>
     case 'group':
       return <div key={part.name}>
@@ -28,8 +38,11 @@ const Part = ({ part }: PartProps) => {
       </div>
     case 'background':
       return <div key={part.name}>
-        <PartBase name={part.name} exerciseCount={part.exerciseCount} />
-        <p>{part.description}</p> 
+        <PartWithDescription 
+          name={part.name} 
+          exerciseCount={part.exerciseCount} 
+          description={part.description} 
+        />
         <p>{part.backgroundMaterial}</p>
       </div>
     default:

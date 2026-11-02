@@ -3,7 +3,7 @@ export interface CoursePartBase {
   exerciseCount: number;
 }
 
-interface CoursePartDescription extends CoursePartBase {
+export interface CoursePartDescription extends CoursePartBase {
   description: string;
 }
 
