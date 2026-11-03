@@ -1,9 +1,20 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import { z } from 'zod';
 import patientService from '../services/patientService.ts';
-import { NewPatientEntrySchema, type NewPatientEntry, type NonSensitivePatientEntry } from '../types.ts';
+import { 
+  NewPatientEntrySchema, 
+  type NewPatientEntry, 
+  type NonSensitivePatientEntry, 
+  type PatientEntry 
+} from '../types.ts';
 
 const router = express.Router();
+
+router.get('/:id', (req, res: Response<PatientEntry>) => {
+  const { id } = req.params;
+  const patient = patientService.getPatientById(id);
+  res.json(patient);
+});
 
 router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
   res.send(patientService.getNonSensitiveEntries());

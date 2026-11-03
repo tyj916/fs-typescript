@@ -6,6 +6,16 @@ const getPatients = (): PatientEntry[] => {
   return patients;
 };
 
+const getPatientById = (id: string): PatientEntry => {
+  const patient = patients.find(p => p.id === id);
+
+  if (!patient) {
+    throw new Error('Patient not found');
+  }
+
+  return patient;
+};
+
 const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
@@ -27,6 +37,7 @@ const addPatient = (patient: NewPatientEntry): PatientEntry => {
 
 export default {
   getPatients,
+  getPatientById,
   getNonSensitiveEntries,
   addPatient,
 };
