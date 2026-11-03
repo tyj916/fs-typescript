@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../services/patients";
+import { Patient } from "../types";
+import { Male, Female, Transgender } from '@mui/icons-material';
 
 const PatientInfo = () => {
   const { id } = useParams();
-  const [patient, setPatient] = useState(null);
+  const [patient, setPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
     if (!id) return; 
@@ -21,11 +23,17 @@ const PatientInfo = () => {
     return <p>Patient not found</p>;
   }
 
-  console.log(patient);
-
   return (
     <div>
-      <h2>{id}</h2>
+      <h2>
+        {patient.name} 
+        {patient.gender === 'male' ? <Male /> 
+          : patient.gender === 'female' ? <Female />
+          : <Transgender /> }  
+      </h2>
+      {patient.ssn && <p>ssn: {patient.ssn}</p>}
+      <p>occupation: {patient.occupation}</p>
+      {patient.dateOfBirth && <p>date of birth: {patient.dateOfBirth}</p>}
     </div>
   );
 };
