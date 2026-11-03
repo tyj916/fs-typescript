@@ -18,7 +18,7 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }

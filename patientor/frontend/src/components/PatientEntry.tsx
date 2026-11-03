@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Entry, Diagnosis } from "../types";
+import { Entry, Diagnosis, Discharge } from "../types";
 import diagnoseService from "../services/diagnoses";
 
-const Hospital = ({ entry }: { entry: Entry }) => {
-  console.log(entry);
+const Hospital = ({ discharge }: { discharge: Discharge }) => {
   return (
-    <div></div>
+    <div>
+      <p>discharge: {discharge.date} - {discharge.criteria}</p>
+    </div>
   );
 };
 
@@ -32,7 +33,7 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
 
   switch (entry.type) {
     case 'Hospital':
-      return <Hospital entry={entry} />;
+      return <Hospital discharge={entry.discharge} />;
     case 'OccupationalHealthcare':
       return <OccupationalHealthcare entry={entry} />;
     case 'HealthCheck':
@@ -78,6 +79,8 @@ const PatientEntry = ({ entry }: { entry: Entry}) => {
       </ul>
 
       <EntryDetails entry={entry} />
+
+      <p>diagnose by {entry.specialist}</p>
     </div>
   );
 };
