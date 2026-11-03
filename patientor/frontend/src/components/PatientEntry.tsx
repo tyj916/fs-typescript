@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Entry, Diagnosis, Discharge, SickLeave, HealthCheckRating } from "../types";
 import diagnoseService from "../services/diagnoses";
+import { Box, Paper } from "@mui/material";
 
 const Hospital = ({ discharge }: { discharge: Discharge }) => {
   return (
@@ -63,11 +64,11 @@ const PatientEntry = ({ entry }: { entry: Entry}) => {
   }, [entry]);
 
   return (
-    <div>
-      <p>
+    <Box component={Paper} variant="outlined" sx={{ px: 1, my: 1 }}>
+      <p><strong>
         {entry.date} {entry.type} {' '}
         {entry.type === 'OccupationalHealthcare' && entry.employerName}
-      </p>
+      </strong></p>
 
       <p><em>{entry.description}</em></p>
       
@@ -86,7 +87,7 @@ const PatientEntry = ({ entry }: { entry: Entry}) => {
       <EntryDetails entry={entry} />
 
       <p>diagnose by {entry.specialist}</p>
-    </div>
+    </Box>
   );
 };
 
