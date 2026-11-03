@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type ErrorRequestHandler } from 'express';
 import diagnoseRouter from './routes/diagnoses.ts';
 import patientRouter from './routes/patients.ts';
 
@@ -13,6 +13,20 @@ app.get('/api/ping', (_req, res) => {
 
 app.use('/api/diagnoses', diagnoseRouter);
 app.use('/api/patients', patientRouter);
+
+const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+  if (error instanceof Error) {
+    return res.status(400).json({ error: 'Something went wrong. ' + error.message });
+  }
+
+  console.error(error);
+
+  return res.status(500).json({
+    error: 'internal server error'
+  });
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
