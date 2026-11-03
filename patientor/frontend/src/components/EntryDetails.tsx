@@ -11,8 +11,10 @@ const EntryDetails = ({ entry }: { entry: Entry}) => {
       setDiagnoses(diagnoses);
     };
 
-    fetchDiagnoses();
-  }, []);
+    if (entry.diagnosisCodes) {
+      fetchDiagnoses();
+    }
+  }, [entry]);
 
   return (
     <div>
