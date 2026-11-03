@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entry, Diagnosis, Discharge, SickLeave } from "../types";
+import { Entry, Diagnosis, Discharge, SickLeave, HealthCheckRating } from "../types";
 import diagnoseService from "../services/diagnoses";
 
 const Hospital = ({ discharge }: { discharge: Discharge }) => {
@@ -21,10 +21,11 @@ const OccupationalHealthcare = ({ sickLeave }: { sickLeave: SickLeave | undefine
   );
 };
 
-const HealthCheck = ({ entry }: { entry: Entry }) => {
-  console.log(entry);
+const HealthCheck = ({ rating }: { rating: HealthCheckRating }) => {
   return (
-    <div></div>
+    <div>
+      <p>Health Check Rating: {rating}</p>
+    </div>
   );
 };
 
@@ -41,7 +42,7 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
     case 'OccupationalHealthcare':
       return <OccupationalHealthcare sickLeave={entry.sickLeave} />;
     case 'HealthCheck':
-      return <HealthCheck entry={entry} />;
+      return <HealthCheck rating={entry.healthCheckRating} />;
     default:
       assertNever(entry);
   }
