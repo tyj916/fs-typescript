@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import patientService from "../services/patients";
 import { Patient } from "../types";
 import { Male, Female, Transgender } from '@mui/icons-material';
-import EntryDetails from "./EntryDetails";
+import PatientEntry from "./PatientEntry";
 
 const PatientInfo = () => {
   const { id } = useParams();
@@ -38,7 +38,7 @@ const PatientInfo = () => {
       {patient.entries && <div>
         <h3>entries</h3>
         {patient.entries.map(entry => 
-          <EntryDetails key={entry.id} entry={entry} />
+          <PatientEntry key={entry.id} entry={entry} />
         )}
       </div>}
     </div>
