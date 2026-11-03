@@ -1,12 +1,12 @@
 import { v4 as uuid } from 'uuid';
 import patients from "../../data/patients.ts";
-import type { NewPatientEntry, PatientEntry, NonSensitivePatientEntry } from "../types.ts";
+import type { NewPatientEntry, Patient, NonSensitivePatientEntry } from "../types.ts";
 
-const getPatients = (): PatientEntry[] => {
+const getPatients = (): Patient[] => {
   return patients;
 };
 
-const getPatientById = (id: string): PatientEntry => {
+const getPatientById = (id: string): Patient => {
   const patient = patients.find(p => p.id === id);
 
   if (!patient) {
@@ -26,7 +26,7 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
   }));
 };
 
-const addPatient = (patient: NewPatientEntry): PatientEntry => {
+const addPatient = (patient: NewPatientEntry): Patient => {
   const newPatient = {
     id: uuid(),
     entries: [],

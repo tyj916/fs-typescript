@@ -5,12 +5,12 @@ import {
   NewPatientEntrySchema, 
   type NewPatientEntry, 
   type NonSensitivePatientEntry, 
-  type PatientEntry 
+  type Patient 
 } from '../types.ts';
 
 const router = express.Router();
 
-router.get('/:id', (req, res: Response<PatientEntry>) => {
+router.get('/:id', (req, res: Response<Patient>) => {
   const { id } = req.params;
   const patient = patientService.getPatientById(id);
   res.json(patient);
