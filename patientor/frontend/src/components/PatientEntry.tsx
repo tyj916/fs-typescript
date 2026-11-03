@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entry, Diagnosis, Discharge } from "../types";
+import { Entry, Diagnosis, Discharge, SickLeave } from "../types";
 import diagnoseService from "../services/diagnoses";
 
 const Hospital = ({ discharge }: { discharge: Discharge }) => {
@@ -10,10 +10,14 @@ const Hospital = ({ discharge }: { discharge: Discharge }) => {
   );
 };
 
-const OccupationalHealthcare = ({ entry }: { entry: Entry }) => {
-  console.log(entry);
+const OccupationalHealthcare = ({ sickLeave }: { sickLeave: SickLeave | undefined }) => {
+  if (!sickLeave) return null;
+
   return (
-    <div></div>
+    <div>
+      <p>Sick leave start date {sickLeave.startDate}</p>
+      <p>Sick leave end date {sickLeave.endDate}</p>
+    </div>
   );
 };
 
@@ -35,7 +39,7 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
     case 'Hospital':
       return <Hospital discharge={entry.discharge} />;
     case 'OccupationalHealthcare':
-      return <OccupationalHealthcare entry={entry} />;
+      return <OccupationalHealthcare sickLeave={entry.sickLeave} />;
     case 'HealthCheck':
       return <HealthCheck entry={entry} />;
     default:
@@ -60,7 +64,7 @@ const PatientEntry = ({ entry }: { entry: Entry}) => {
   return (
     <div>
       <p>
-        {entry.date} {entry.type} 
+        {entry.date} {entry.type} {' '}
         {entry.type === 'OccupationalHealthcare' && entry.employerName}
       </p>
 
