@@ -22,10 +22,9 @@ const isHealthCheckRating = (value: number): value is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
 };
 
-const HealthCheckField = ({ rating, changeRating, commonFieldProps }: {
+const HealthCheckField = ({ rating, changeRating }: {
   rating: HealthCheckRating;
   changeRating: (e: SelectChangeEvent<HealthCheckRating>) => void;
-  commonFieldProps: object
 }) => {
   return (
     <FormControl>
@@ -37,7 +36,6 @@ const HealthCheckField = ({ rating, changeRating, commonFieldProps }: {
         value={rating} 
         onChange={changeRating}
         required
-        {...commonFieldProps}
       >
         <MenuItem value={0}>0 - Healthy</MenuItem>
         <MenuItem value={1}>1 - Low Risk</MenuItem>
@@ -53,13 +51,11 @@ const HospitalField = ({
   dischargeCriteria, 
   changeDischargeDate, 
   changeDischargeCriteria,
-  commonFieldProps,
 }: {
   dischargeDate: string;
   dischargeCriteria: string;
   changeDischargeDate: (e: React.ChangeEvent<HTMLInputElement>) => void;
   changeDischargeCriteria: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  commonFieldProps: object;
 }) => {
   return (
     <>
@@ -71,7 +67,6 @@ const HospitalField = ({
         value={dischargeDate}
         onChange={changeDischargeDate}
         required
-        {...commonFieldProps}
       />
       <TextField 
         name="dischargeCriteria"
@@ -79,7 +74,6 @@ const HospitalField = ({
         value={dischargeCriteria}
         onChange={changeDischargeCriteria}
         required
-        {...commonFieldProps}
       />
     </>
   );
@@ -92,7 +86,6 @@ const OccupationalHealthcareField = ({
   changeSickLeaveStart,
   sickLeaveEnd,
   changeSickLeaveEnd,
-  commonFieldProps,
 }: {
   employerName: string;
   changeEmployerName: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -100,7 +93,6 @@ const OccupationalHealthcareField = ({
   changeSickLeaveStart: (e: React.ChangeEvent<HTMLInputElement>) => void;
   sickLeaveEnd: string;
   changeSickLeaveEnd: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  commonFieldProps: object
 }) => {
   return (
     <>
@@ -110,7 +102,6 @@ const OccupationalHealthcareField = ({
         value={employerName}
         onChange={changeEmployerName}
         required
-        {...commonFieldProps}
       />
       <TextField 
         type="date"
@@ -119,7 +110,6 @@ const OccupationalHealthcareField = ({
         label="Sick Leave Start Date"
         value={sickLeaveStart}
         onChange={changeSickLeaveStart}
-        {...commonFieldProps}
       />
       <TextField 
         type="date"
@@ -128,7 +118,6 @@ const OccupationalHealthcareField = ({
         label="Sick Leave End Date"
         value={sickLeaveEnd}
         onChange={changeSickLeaveEnd}
-        {...commonFieldProps}
       />
     </>
   );
@@ -300,11 +289,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     );
   };
 
-  const commonFieldProps = {
-    size: "small" as const,
-    fullWidth: true,
-  };
-
   return (
     <Box component={Paper} variant="outlined" sx={{ p: 2 }}>
       <Typography variant="h4" component="h3" sx={{ mb: 2 }}>New entry</Typography>
@@ -319,7 +303,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
               label="Entry type" 
               value={type} 
               onChange={changeType}
-              {...commonFieldProps}
             >
               <MenuItem value="HealthCheck">Health Check</MenuItem>
               <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
@@ -335,7 +318,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             value={date} 
             onChange={(e) => setDate(e.target.value)} 
             required 
-            {...commonFieldProps}
           />
           <TextField 
             name="description" 
@@ -343,7 +325,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
             required 
-            {...commonFieldProps}
           />
           <TextField 
             name="specialist" 
@@ -351,12 +332,10 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             value={specialist} 
             onChange={(e) => setSpecialist(e.target.value)} 
             required 
-            {...commonFieldProps}
           />
           {type === 'HealthCheck' && <HealthCheckField 
             rating={rating} 
             changeRating={changeRating} 
-            commonFieldProps={commonFieldProps} 
           />}
 
           {type === 'Hospital' && <HospitalField 
@@ -364,7 +343,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             dischargeCriteria={dischargeCriteria}
             changeDischargeDate={changeDischargeDate}
             changeDischargeCriteria={changeDischargeCriteria}
-            commonFieldProps={commonFieldProps}
           />}
 
           {type === 'OccupationalHealthcare' && <OccupationalHealthcareField 
@@ -374,7 +352,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             changeSickLeaveStart={changeSickLeaveStart}
             sickLeaveEnd={sickLeaveEnd}
             changeSickLeaveEnd={changeSickLeaveEnd}
-            commonFieldProps={commonFieldProps}
           />}
 
           <FormControl>
