@@ -61,6 +61,7 @@ const HospitalField = ({
     <>
       <TextField 
         type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
         name="dischargeDate"
         label="Discharge Date"
         value={dischargeDate}
@@ -184,7 +185,9 @@ const EntryForm = ({ error, createEntry, hideForm }: {
 
           <TextField 
             type="date"
+            slotProps={{ inputLabel: { shrink: true } }}
             name="date" 
+            label="Date"
             value={date} 
             onChange={(e) => setDate(e.target.value)} 
             required 
