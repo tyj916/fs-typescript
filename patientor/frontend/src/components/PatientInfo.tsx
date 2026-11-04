@@ -39,7 +39,7 @@ const PatientInfo = () => {
       <p>occupation: {patient.occupation}</p>
       {patient.dateOfBirth && <p>date of birth: {patient.dateOfBirth}</p>}
 
-      {showEntryForm ? <EntryForm hideForm={() => setShowEntryForm(false)} /> 
+      {showEntryForm ? <EntryForm patientId={patient.id} hideForm={() => setShowEntryForm(false)} /> 
         : <Button variant="outlined" onClick={() => setShowEntryForm(true)}>
           create new entry
         </Button>}

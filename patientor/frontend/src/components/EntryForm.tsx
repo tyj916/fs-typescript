@@ -1,15 +1,39 @@
 import { Box, Paper, TextField, Stack, Button, Typography } from "@mui/material";
 import { useState } from "react";
+import { Diagnosis, HealthCheckRating, Patient } from "../types";
+import patientService from "../services/patients";
 
-const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
+const EntryForm = ({ patientId, hideForm }: { 
+  patientId: Patient['id'];
+  hideForm: () => void ;
+}) => {
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [specialist, setSpecialist] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState<HealthCheckRating>(0);
   const [codes, setCodes] = useState('');
 
-  const createEntry = (e: React.SyntheticEvent) => {
+  const createEntry = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    const enteredCodes: Array<Diagnosis['code']> = codes
+      .replace(' ', '').split(',').filter(Boolean);
+
+    const addedEntry = await patientService.createEntry(patientId, {
+      date,
+      description,
+      specialist,
+      healthCheckRating: rating,
+      diagnosisCodes: enteredCodes,
+      type: "HealthCheck",
+    });
+
+    console.log(addedEntry);
+    setDate('');
+    setDescription('');
+    setSpecialist('');
+    setRating(0);
+    setCodes('');
   };
 
   const commonFieldProps = {
@@ -58,7 +82,12 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
                 step: 1,
               }
             }}
-            onChange={(e) => setRating(e.target.value)} 
+            onChange={(e) => {
+              const { value } = e.target;
+              if (typeof value === 'number' && [0, 1, 2, 3].includes(value)) {
+                setRating(value);
+              }
+            }} 
             required 
             {...commonFieldProps}
           />
@@ -66,8 +95,7 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
             name="codes" 
             label="Diagnosis Codes (comma-separated)" 
             value={codes} 
-            onChange={(e) => setCodes(e.target.value)} 
-            required 
+            onChange={(e) => setCodes(e.target.value)}  
             {...commonFieldProps}
           />
           <Stack direction="row" spacing={2}>
