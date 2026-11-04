@@ -21,26 +21,27 @@ const isHealthCheckRating = (value: number): value is HealthCheckRating => {
 
 const HealthCheckField = ({ rating, changeRating, commonFieldProps }: {
   rating: HealthCheckRating;
-  changeRating: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  changeRating: (e: SelectChangeEvent<HealthCheckRating>) => void;
   commonFieldProps: object
 }) => {
   return (
-    <TextField 
-      type="number"
-      name="rating" 
-      label="Health Check Rating (0-3)" 
-      value={rating} 
-      slotProps={{
-        htmlInput: {
-          min: 0,
-          max: 3,
-          step: 1,
-        }
-      }}
-      onChange={changeRating} 
-      required 
-      {...commonFieldProps}
-    />
+    <FormControl>
+      <InputLabel id="health-check-rating-label">Health Check Rating</InputLabel>
+      <Select 
+        labelId="health-check-rating-label"
+        id="health-check-rating"
+        label="Health Check Rating" 
+        value={rating} 
+        onChange={changeRating}
+        required
+        {...commonFieldProps}
+      >
+        <MenuItem value={0}>0 - Healthy</MenuItem>
+        <MenuItem value={1}>1 - Low Risk</MenuItem>
+        <MenuItem value={2}>2 - High Risk</MenuItem>
+        <MenuItem value={3}>3 - Critical Risk</MenuItem>
+      </Select>
+    </FormControl>
   );
 };
 
@@ -234,7 +235,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     setCodes('');
   };
 
-  const changeRating = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeRating = (e: SelectChangeEvent<HealthCheckRating>) => {
     const value = Number(e.target.value);
 
     if (isHealthCheckRating(value)) {
