@@ -195,9 +195,9 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     <Box component={Paper} variant="outlined" sx={{ p: 2 }}>
       <Typography variant="h4" component="h3" sx={{ mb: 2 }}>New entry</Typography>
       {error && <Alert severity="error">{error}</Alert>}
-      <FormControl onSubmit={handleSubmit} fullWidth>
+      <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
-          <Box>
+          <FormControl>
             <InputLabel id="entry-type-label">Entry type</InputLabel>
             <Select 
               labelId="entry-type-label"
@@ -211,7 +211,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
               <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
               <MenuItem value="Hospital">Hospital</MenuItem>
             </Select>
-          </Box>
+          </FormControl>
 
           <TextField 
             type="date"
@@ -267,7 +267,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             <Button onClick={() => hideForm()} variant="outlined">cancel</Button>
           </Stack>
         </Stack>
-      </FormControl>
+      </form>
     </Box>
   );
 };
