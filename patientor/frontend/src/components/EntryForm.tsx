@@ -19,6 +19,31 @@ const isHealthCheckRating = (value: number): value is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
 };
 
+const HealthCheckField = ({ rating, changeRating, commonFieldProps }: {
+  rating: HealthCheckRating;
+  changeRating: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  commonFieldProps: object
+}) => {
+  return (
+    <TextField 
+      type="number"
+      name="rating" 
+      label="Health Check Rating (0-3)" 
+      value={rating} 
+      slotProps={{
+        htmlInput: {
+          min: 0,
+          max: 3,
+          step: 1,
+        }
+      }}
+      onChange={changeRating} 
+      required 
+      {...commonFieldProps}
+    />
+  );
+};
+
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
   createEntry: (object: EntryWithoutId) => void;
@@ -29,6 +54,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [specialist, setSpecialist] = useState('');
   const [codes, setCodes] = useState('');
   const [type, setType] = useState<Entry['type']>('HealthCheck');
+
   const [rating, setRating] = useState<HealthCheckRating>(0);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -134,21 +160,10 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             required 
             {...commonFieldProps}
           />
-          {type === 'HealthCheck' &&<TextField 
-            type="number"
-            name="rating" 
-            label="Health Check Rating (0-3)" 
-            value={rating} 
-            slotProps={{
-              htmlInput: {
-                min: 0,
-                max: 3,
-                step: 1,
-              }
-            }}
-            onChange={changeRating} 
-            required 
-            {...commonFieldProps}
+          {type === 'HealthCheck' && <HealthCheckField 
+            rating={rating} 
+            changeRating={changeRating} 
+            commonFieldProps={commonFieldProps} 
           />}
 
           {type === 'Hospital' && <p>Hospital</p>}
