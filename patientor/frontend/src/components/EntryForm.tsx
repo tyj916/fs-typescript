@@ -199,6 +199,24 @@ const EntryForm = ({ error, createEntry, hideForm }: {
         setDischargeDate('');
         setDischargeCriteria('');
         break;
+
+      case 'OccupationalHealthcare':
+        const sickLeave = (sickLeaveStart && sickLeaveEnd) ? {
+          startDate: sickLeaveStart,
+          endDate: sickLeaveEnd,
+        } : undefined;
+
+        createEntry({
+          ...baseEntry,
+          type: "OccupationalHealthcare",
+          employerName,
+          sickLeave,
+        });
+
+        setEmployerName('');
+        setSickLeaveStart('');
+        setSickLeaveEnd('');
+        break;
     }
 
     setDate('');
