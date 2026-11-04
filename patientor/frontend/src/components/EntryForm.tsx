@@ -9,7 +9,12 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
   const [codes, setCodes] = useState('');
 
   const createEntry = (e: React.SyntheticEvent) => {
-    e.preventDefault();    
+    e.preventDefault();
+  };
+
+  const commonFieldProps = {
+    size: "small" as const,
+    fullWidth: true,
   };
 
   return (
@@ -23,8 +28,7 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
             value={date} 
             onChange={(e) => setDate(e.target.value)} 
             required 
-            size="small"
-            fullWidth
+            {...commonFieldProps}
           />
           <TextField 
             name="description" 
@@ -32,8 +36,7 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
             required 
-            size="small"
-            fullWidth
+            {...commonFieldProps}
           />
           <TextField 
             name="specialist" 
@@ -41,17 +44,23 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
             value={specialist} 
             onChange={(e) => setSpecialist(e.target.value)} 
             required 
-            size="small"
-            fullWidth
+            {...commonFieldProps}
           />
           <TextField 
+            type="number"
             name="rating" 
             label="Health Check Rating (0-3)" 
             value={rating} 
+            slotProps={{
+              htmlInput: {
+                min: 0,
+                max: 3,
+                step: 1,
+              }
+            }}
             onChange={(e) => setRating(e.target.value)} 
             required 
-            size="small"
-            fullWidth
+            {...commonFieldProps}
           />
           <TextField 
             name="codes" 
@@ -59,12 +68,11 @@ const EntryForm = ({ hideForm }: { hideForm: () => void }) => {
             value={codes} 
             onChange={(e) => setCodes(e.target.value)} 
             required 
-            size="small"
-            fullWidth
+            {...commonFieldProps}
           />
           <Stack direction="row" spacing={2}>
-            <Button variant="contained">add</Button>
-            <Button variant="outlined" onClick={() => hideForm()}>cancel</Button>
+            <Button type="submit" variant="contained">add</Button>
+            <Button onClick={() => hideForm()} variant="outlined">cancel</Button>
           </Stack>
         </Stack>
       </form>
