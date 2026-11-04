@@ -1,9 +1,11 @@
 import express, { type ErrorRequestHandler } from 'express';
+import cors from 'cors';
 import diagnoseRouter from './routes/diagnoses.ts';
 import patientRouter from './routes/patients.ts';
 
 const app = express();
 
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
 app.get('/api/ping', (_req, res) => {

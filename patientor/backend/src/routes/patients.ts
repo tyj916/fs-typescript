@@ -19,7 +19,7 @@ router.get('/:id', (req, res: Response<Patient>) => {
 });
 
 router.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
-  res.send(patientService.getNonSensitiveEntries());
+  res.json(patientService.getNonSensitiveEntries());
 });
 
 const newEntryParser = (req: Request, _res: Response, next: NextFunction) => {
