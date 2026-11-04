@@ -38,26 +38,9 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   }
 };
 
-const assertNever = (value: never): never => {
-  throw new Error(`Unexpected value: ${value}`);
-};
-
-router.post('/:id/entries', (req: Request<unknown, unknown, NewEntry>, res: Response) => {
-  const body = req.body;
-
-  switch (body.type) {
-    case "Hospital":
-      console.log("Type Hospital");
-      return res.json(body);
-    case "OccupationalHealthcare":
-      console.log("Type Occupational Healthcare");
-      return res.json(body);
-    case "HealthCheck":
-      console.log("Type Health Check");
-      return res.json(body);
-    default:
-      return assertNever(body);
-  }
+router.post('/:id/entries', (req: Request<{ id: Patient['id']}, unknown, NewEntry>, res: Response) => {
+  const addedEntry = patientService.addEntry(req.params.id, req.body);
+  res.json(addedEntry);
 });
 
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, res: Response<NewPatient>) => {

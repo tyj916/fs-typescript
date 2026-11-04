@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import patients from "../../data/patients.ts";
-import type { NewPatient, Patient, NonSensitivePatient } from "../types.ts";
+import type { NewPatient, Patient, NonSensitivePatient, NewEntry, Entry } from "../types.ts";
 
 const getPatients = (): Patient[] => {
   return patients;
@@ -36,9 +36,22 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
+const addEntry = (id: Patient['id'], entry: NewEntry): Entry => {
+  const newEntry = {
+    id: uuid(),
+    diagnosisCodes: entry.diagnosisCodes || [],
+    ...entry,
+  };
+  patients.map(patient => 
+    patient.id === id ? patient.entries = patient.entries.concat(newEntry) : patient
+  );
+  return newEntry;
+};
+
 export default {
   getPatients,
   getPatientById,
   getNonSensitiveEntries,
   addPatient,
+  addEntry,
 };
