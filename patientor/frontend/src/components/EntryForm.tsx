@@ -130,6 +130,12 @@ const OccupationalHealthcareField = ({
   );
 };
 
+const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
   createEntry: (object: EntryWithoutId) => void;
@@ -217,6 +223,9 @@ const EntryForm = ({ error, createEntry, hideForm }: {
         setSickLeaveStart('');
         setSickLeaveEnd('');
         break;
+
+      default:
+        assertNever(type);
     }
 
     setDate('');
