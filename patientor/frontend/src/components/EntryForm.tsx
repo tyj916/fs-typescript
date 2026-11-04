@@ -1,6 +1,6 @@
-import { Box, Paper, TextField, Stack, Button, Typography, Alert } from "@mui/material";
+import { Box, Paper, TextField, Stack, Button, Typography, Alert, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { useState } from "react";
-import { Diagnosis, EntryWithoutId, HealthCheckRating } from "../types";
+import { Diagnosis, Entry, EntryWithoutId, HealthCheckRating } from "../types";
 
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
@@ -10,8 +10,9 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [specialist, setSpecialist] = useState('');
-  const [rating, setRating] = useState('');
   const [codes, setCodes] = useState('');
+  const [type, setType] = useState<Entry['type']>('HealthCheck');
+  const [rating, setRating] = useState('');
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -54,8 +55,24 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     <Box component={Paper} variant="outlined" sx={{ p: 2 }}>
       <Typography variant="h4" component="h3" sx={{ mb: 2 }}>New entry</Typography>
       {error && <Alert severity="error">{error}</Alert>}
-      <form onSubmit={handleSubmit}>
+      <FormControl onSubmit={handleSubmit} fullWidth>
         <Stack spacing={2}>
+          <Box>
+            <InputLabel id="entry-type-label">Entry type</InputLabel>
+            <Select 
+              labelId="entry-type-label"
+              id="entry-type"
+              label="Entry type" 
+              value={type} 
+              onChange={e => setType(e.target.value)}
+              {...commonFieldProps}
+            >
+              <MenuItem value="HealthCheck">Health Check</MenuItem>
+              <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
+              <MenuItem value="Hospital">Hospital</MenuItem>
+            </Select>
+          </Box>
+
           <TextField 
             type="date"
             name="date" 
@@ -108,7 +125,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             <Button onClick={() => hideForm()} variant="outlined">cancel</Button>
           </Stack>
         </Stack>
-      </form>
+      </FormControl>
     </Box>
   );
 };
