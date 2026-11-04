@@ -12,7 +12,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [specialist, setSpecialist] = useState('');
   const [codes, setCodes] = useState('');
   const [type, setType] = useState<Entry['type']>('HealthCheck');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState<HealthCheckRating>(0);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -42,8 +42,20 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     setDate('');
     setDescription('');
     setSpecialist('');
-    setRating('');
+    setRating(0);
     setCodes('');
+  };
+
+  const changeRating = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+
+    const isHealthCheckRating = (value: number): value is HealthCheckRating => {
+      return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
+    };
+
+    if (isHealthCheckRating(value)) {
+      setRating(value);
+    }
   };
 
   const commonFieldProps = {
@@ -97,7 +109,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             required 
             {...commonFieldProps}
           />
-          <TextField 
+          {type === 'HealthCheck' &&<TextField 
             type="number"
             name="rating" 
             label="Health Check Rating (0-3)" 
@@ -109,10 +121,10 @@ const EntryForm = ({ error, createEntry, hideForm }: {
                 step: 1,
               }
             }}
-            onChange={(e) => setRating(e.target.value)} 
+            onChange={changeRating} 
             required 
             {...commonFieldProps}
-          />
+          />}
           <TextField 
             name="codes" 
             label="Diagnosis Codes (comma-separated)" 
