@@ -32,7 +32,8 @@ const PatientInfo = () => {
   const createEntry = async (object: EntryWithoutId) => {
     try {
       const addedEntry = await patientService.createEntry(patient.id, object);
-      console.log(addedEntry);
+      const newEntries = patient.entries.concat(addedEntry);
+      setPatient({ ...patient, entries: newEntries });
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "string") {
