@@ -1,4 +1,17 @@
-import { Box, Paper, TextField, Stack, Button, Typography, Alert, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { 
+  Box, 
+  Paper, 
+  TextField, 
+  Stack, 
+  Button, 
+  Typography, 
+  Alert, 
+  Select, 
+  SelectChangeEvent,
+  MenuItem, 
+  InputLabel, 
+  FormControl, 
+} from "@mui/material";
 import { useState } from "react";
 import { Diagnosis, Entry, EntryWithoutId, HealthCheckRating } from "../types";
 
@@ -58,6 +71,22 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     }
   };
 
+  const changeType = (e: SelectChangeEvent) => {
+    const value = e.target.value;
+
+    const isEntryType = (value: string): value is Entry['type'] => {
+      return (
+        value === 'HealthCheck' ||
+        value === 'OccupationalHealthcare' ||
+        value === 'Hospital'
+      );
+    };
+
+    if (isEntryType(value)) {
+      setType(value);
+    }
+  };
+
   const commonFieldProps = {
     size: "small" as const,
     fullWidth: true,
@@ -76,7 +105,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
               id="entry-type"
               label="Entry type" 
               value={type} 
-              onChange={e => setType(e.target.value)}
+              onChange={changeType}
               {...commonFieldProps}
             >
               <MenuItem value="HealthCheck">Health Check</MenuItem>
@@ -125,6 +154,10 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             required 
             {...commonFieldProps}
           />}
+
+          {type === 'Hospital' && <p>Hospital</p>}
+          {type === 'OccupationalHealthcare' && <p>OccupationalHealthcare</p>}
+
           <TextField 
             name="codes" 
             label="Diagnosis Codes (comma-separated)" 
