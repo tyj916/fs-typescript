@@ -60,7 +60,7 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-export const NewPatientEntrySchema = z.object({
+export const NewPatientSchema = z.object({
   name: z.string(),
   dateOfBirth: z.iso.date(),
   ssn: z.string(),
@@ -68,10 +68,10 @@ export const NewPatientEntrySchema = z.object({
   occupation: z.string(),
 });
 
-export type NewPatientEntry = z.infer<typeof NewPatientEntrySchema>;
-export interface Patient extends NewPatientEntry {
+export type NewPatient = z.infer<typeof NewPatientSchema>;
+export interface Patient extends NewPatient {
   id: string,
   entries: Entry[]
 }
 
-export type NonSensitivePatientEntry = Omit<Patient, 'ssn' | 'entries'>;
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;

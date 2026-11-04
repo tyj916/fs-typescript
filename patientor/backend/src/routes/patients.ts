@@ -2,9 +2,9 @@ import express, { type Request, type Response, type NextFunction } from 'express
 import { z } from 'zod';
 import patientService from '../services/patientService.ts';
 import { 
-  NewPatientEntrySchema, 
-  type NewPatientEntry, 
-  type NonSensitivePatientEntry, 
+  NewPatientSchema, 
+  type NewPatient, 
+  type NonSensitivePatient, 
   type Patient 
 } from '../types.ts';
 
@@ -16,7 +16,7 @@ router.get('/:id', (req, res: Response<Patient>) => {
   res.json(patient);
 });
 
-router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
+router.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
   res.send(patientService.getNonSensitiveEntries());
 });
 
@@ -30,14 +30,14 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   try {
-    NewPatientEntrySchema.parse(req.body);
+    NewPatientSchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);
   }
 };
 
-router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientEntry>, res: Response<NewPatientEntry>) => {
+router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, res: Response<NewPatient>) => {
   const addedPatient = patientService.addPatient(req.body);
   res.json(addedPatient);
 });
