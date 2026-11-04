@@ -160,11 +160,11 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [sickLeaveStart, setSickLeaveStart] = useState('');
   const [sickLeaveEnd, setSickLeaveEnd] = useState('');
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     const diagnosisCodes: Array<Diagnosis['code']> = codes
-      .replace(' ', '').split(',').filter(Boolean);
+      .split(',').map(code => code.trim()).filter(Boolean);
 
     const baseEntry = {
       date,
