@@ -69,7 +69,7 @@ const PatientInfo = () => {
       />}
 
       {!showEntryForm && <Button variant="outlined" onClick={() => setShowEntryForm(true)}>
-        create new entry
+        add new entry
       </Button>}
       
       {patient.entries && <div>
