@@ -10,10 +10,13 @@ import {
   SelectChangeEvent,
   MenuItem, 
   InputLabel, 
-  FormControl, 
+  FormControl,
+  Chip,
+  OutlinedInput, 
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Diagnosis, Entry, EntryWithoutId, HealthCheckRating } from "../types";
+import diagnoseService from "../services/diagnoses";
 
 const isHealthCheckRating = (value: number): value is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
@@ -145,27 +148,35 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [specialist, setSpecialist] = useState('');
-  const [codes, setCodes] = useState('');
-
+  
   const [type, setType] = useState<Entry['type']>('HealthCheck');
-
+  
   // HealthCheck
   const [rating, setRating] = useState<HealthCheckRating>(0);
-
+  
   // Hospital
   const [dischargeDate, setDischargeDate] = useState('');
   const [dischargeCriteria, setDischargeCriteria] = useState('');
-
+  
   // OccupationalHealthcare
   const [employerName, setEmployerName] = useState('');
   const [sickLeaveStart, setSickLeaveStart] = useState('');
   const [sickLeaveEnd, setSickLeaveEnd] = useState('');
+  
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [diagnosisCodes, setDiagnosisCodes] = useState<Diagnosis['code'][]>([]);
+
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnoseService.getAll();
+      setDiagnoses(diagnoses);
+    };
+
+    fetchDiagnoses();
+  }, []);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-
-    const diagnosisCodes: Array<Diagnosis['code']> = codes
-      .split(',').map(code => code.trim()).filter(Boolean);
 
     const baseEntry = {
       date,
@@ -232,7 +243,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     setDate('');
     setDescription('');
     setSpecialist('');
-    setCodes('');
+    setDiagnosisCodes([]);
   };
 
   const changeRating = (e: SelectChangeEvent<HealthCheckRating>) => {
@@ -277,6 +288,16 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     if (isEntryType(value)) {
       setType(value);
     }
+  };
+
+  const changeDiagnosisCodes = (event: SelectChangeEvent<Diagnosis['code'][]>) => {
+    const {
+      target: { value },
+    } = event;
+    setDiagnosisCodes(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
   };
 
   const commonFieldProps = {
@@ -356,13 +377,31 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             commonFieldProps={commonFieldProps}
           />}
 
-          <TextField 
-            name="codes" 
-            label="Diagnosis Codes (comma-separated)" 
-            value={codes} 
-            onChange={(e) => setCodes(e.target.value)}  
-            {...commonFieldProps}
-          />
+          <FormControl>
+            <InputLabel id="diagnosis-codes-selection-label">Diagnosis Codes</InputLabel>
+            <Select
+              labelId="diagnosis-codes-selection-label"
+              id="diagnosis-codes-selection"
+              multiple
+              value={diagnosisCodes}
+              onChange={changeDiagnosisCodes}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+            >
+              {diagnoses.map(diagnose => 
+                <MenuItem key={diagnose.code} value={diagnose.code}>
+                  {diagnose.code} - {diagnose.name}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+
           <Stack direction="row" spacing={2}>
             <Button type="submit" variant="contained">add</Button>
             <Button onClick={() => hideForm()} variant="outlined">cancel</Button>
