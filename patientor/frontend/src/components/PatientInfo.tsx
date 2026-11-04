@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../services/patients";
-import { Patient } from "../types";
+import { EntryWithoutId, Patient } from "../types";
 import { Male, Female, Transgender } from '@mui/icons-material';
 import PatientEntry from "./PatientEntry";
 import EntryForm from "./EntryForm";
 import { Button } from "@mui/material";
+import axios from "axios";
 
 const PatientInfo = () => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [showEntryForm, setShowEntryForm] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!id) return; 
@@ -27,6 +29,26 @@ const PatientInfo = () => {
     return <p>Patient not found</p>;
   }
 
+  const createEntry = async (object: EntryWithoutId) => {
+    try {
+      const addedEntry = await patientService.createEntry(patient.id, object);
+      console.log(addedEntry);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace('Something went wrong. Error: ', '');
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
+
   return (
     <div>
       <h2>
@@ -39,10 +61,15 @@ const PatientInfo = () => {
       <p>occupation: {patient.occupation}</p>
       {patient.dateOfBirth && <p>date of birth: {patient.dateOfBirth}</p>}
 
-      {showEntryForm ? <EntryForm patientId={patient.id} hideForm={() => setShowEntryForm(false)} /> 
-        : <Button variant="outlined" onClick={() => setShowEntryForm(true)}>
-          create new entry
-        </Button>}
+      {showEntryForm && <EntryForm 
+        error={error} 
+        createEntry={createEntry} 
+        hideForm={() => setShowEntryForm(false)} 
+      />}
+
+      {!showEntryForm && <Button variant="outlined" onClick={() => setShowEntryForm(true)}>
+        create new entry
+      </Button>}
       
       {patient.entries && <div>
         <h3>entries</h3>
