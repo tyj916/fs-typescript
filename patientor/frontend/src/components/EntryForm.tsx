@@ -15,6 +15,10 @@ import {
 import { useState } from "react";
 import { Diagnosis, Entry, EntryWithoutId, HealthCheckRating } from "../types";
 
+const isHealthCheckRating = (value: number): value is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
+};
+
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
   createEntry: (object: EntryWithoutId) => void;
@@ -29,10 +33,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-
-    const isHealthCheckRating = (value: number): value is HealthCheckRating => {
-      return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
-    };
 
     const healthCheckRating = Number(rating);
 
@@ -61,10 +61,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
 
   const changeRating = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
-
-    const isHealthCheckRating = (value: number): value is HealthCheckRating => {
-      return Object.values(HealthCheckRating).includes(value as HealthCheckRating);
-    };
 
     if (isHealthCheckRating(value)) {
       setRating(value);
