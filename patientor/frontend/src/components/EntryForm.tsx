@@ -90,6 +90,7 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [description, setDescription] = useState('');
   const [specialist, setSpecialist] = useState('');
   const [codes, setCodes] = useState('');
+
   const [type, setType] = useState<Entry['type']>('HealthCheck');
 
   const [rating, setRating] = useState<HealthCheckRating>(0);
@@ -99,28 +100,57 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const healthCheckRating = Number(rating);
-
-    if (!isHealthCheckRating(healthCheckRating)) {
-      throw new Error('Invalid health check rating');
-    }
-
-    const enteredCodes: Array<Diagnosis['code']> = codes
+    const diagnosisCodes: Array<Diagnosis['code']> = codes
       .replace(' ', '').split(',').filter(Boolean);
 
-    createEntry({
+    const baseEntry = {
       date,
       description,
       specialist,
-      healthCheckRating,
-      diagnosisCodes: enteredCodes,
-      type: "HealthCheck",
-    });
+      diagnosisCodes,
+    };
+
+    console.log('submit');
+
+    switch (type) {
+      case 'HealthCheck':
+        const healthCheckRating = Number(rating);
+
+        if (!isHealthCheckRating(healthCheckRating)) {
+          throw new Error('Invalid health check rating');
+        }
+
+        console.log('here');
+
+        createEntry({
+          ...baseEntry,
+          type: 'HealthCheck',
+          healthCheckRating,
+        });
+
+        setRating(0);
+        break;
+
+      case 'Hospital':
+        const discharge = {
+          date: dischargeDate,
+          criteria: dischargeCriteria,
+        };
+
+        createEntry({
+          ...baseEntry,
+          type: "Hospital",
+          discharge,
+        });
+
+        setDischargeDate('');
+        setDischargeCriteria('');
+        break;
+    }
 
     setDate('');
     setDescription('');
     setSpecialist('');
-    setRating(0);
     setCodes('');
   };
 
