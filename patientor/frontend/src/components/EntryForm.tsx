@@ -44,6 +44,42 @@ const HealthCheckField = ({ rating, changeRating, commonFieldProps }: {
   );
 };
 
+const HospitalField = ({
+  dischargeDate, 
+  dischargeCriteria, 
+  changeDischargeDate, 
+  changeDischargeCriteria,
+  commonFieldProps,
+}: {
+  dischargeDate: string;
+  dischargeCriteria: string;
+  changeDischargeDate: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  changeDischargeCriteria: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  commonFieldProps: object;
+}) => {
+  return (
+    <>
+      <TextField 
+        type="date"
+        name="dischargeDate"
+        label="Discharge Date"
+        value={dischargeDate}
+        onChange={changeDischargeDate}
+        required
+        {...commonFieldProps}
+      />
+      <TextField 
+        name="dischargeCriteria"
+        label="Discharge Criteria"
+        value={dischargeCriteria}
+        onChange={changeDischargeCriteria}
+        required
+        {...commonFieldProps}
+      />
+    </>
+  );
+};
+
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
   createEntry: (object: EntryWithoutId) => void;
@@ -56,6 +92,8 @@ const EntryForm = ({ error, createEntry, hideForm }: {
   const [type, setType] = useState<Entry['type']>('HealthCheck');
 
   const [rating, setRating] = useState<HealthCheckRating>(0);
+  const [dischargeDate, setDischargeDate] = useState('');
+  const [dischargeCriteria, setDischargeCriteria] = useState('');
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -91,6 +129,14 @@ const EntryForm = ({ error, createEntry, hideForm }: {
     if (isHealthCheckRating(value)) {
       setRating(value);
     }
+  };
+
+  const changeDischargeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDischargeDate(e.target.value);
+  };
+
+  const changeDischargeCriteria = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDischargeCriteria(e.target.value);
   };
 
   const changeType = (e: SelectChangeEvent) => {
@@ -166,7 +212,14 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             commonFieldProps={commonFieldProps} 
           />}
 
-          {type === 'Hospital' && <p>Hospital</p>}
+          {type === 'Hospital' && <HospitalField 
+            dischargeDate={dischargeDate}
+            dischargeCriteria={dischargeCriteria}
+            changeDischargeDate={changeDischargeDate}
+            changeDischargeCriteria={changeDischargeCriteria}
+            commonFieldProps={commonFieldProps}
+          />}
+
           {type === 'OccupationalHealthcare' && <p>OccupationalHealthcare</p>}
 
           <TextField 
