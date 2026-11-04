@@ -81,6 +81,55 @@ const HospitalField = ({
   );
 };
 
+const OccupationalHealthcareField = ({
+  employerName,
+  changeEmployerName,
+  sickLeaveStart,
+  changeSickLeaveStart,
+  sickLeaveEnd,
+  changeSickLeaveEnd,
+  commonFieldProps,
+}: {
+  employerName: string;
+  changeEmployerName: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  sickLeaveStart: string;
+  changeSickLeaveStart: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  sickLeaveEnd: string;
+  changeSickLeaveEnd: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  commonFieldProps: object
+}) => {
+  return (
+    <>
+      <TextField 
+        name="employerName"
+        label="Employer Name"
+        value={employerName}
+        onChange={changeEmployerName}
+        required
+        {...commonFieldProps}
+      />
+      <TextField 
+        type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
+        name="sickLeaveStart"
+        label="Sick Leave Start Date"
+        value={sickLeaveStart}
+        onChange={changeSickLeaveStart}
+        {...commonFieldProps}
+      />
+      <TextField 
+        type="date"
+        slotProps={{ inputLabel: { shrink: true } }}
+        name="sickLeaveEnd"
+        label="Sick Leave End Date"
+        value={sickLeaveEnd}
+        onChange={changeSickLeaveEnd}
+        {...commonFieldProps}
+      />
+    </>
+  );
+};
+
 const EntryForm = ({ error, createEntry, hideForm }: { 
   error: string;
   createEntry: (object: EntryWithoutId) => void;
@@ -93,9 +142,17 @@ const EntryForm = ({ error, createEntry, hideForm }: {
 
   const [type, setType] = useState<Entry['type']>('HealthCheck');
 
+  // HealthCheck
   const [rating, setRating] = useState<HealthCheckRating>(0);
+
+  // Hospital
   const [dischargeDate, setDischargeDate] = useState('');
   const [dischargeCriteria, setDischargeCriteria] = useState('');
+
+  // OccupationalHealthcare
+  const [employerName, setEmployerName] = useState('');
+  const [sickLeaveStart, setSickLeaveStart] = useState('');
+  const [sickLeaveEnd, setSickLeaveEnd] = useState('');
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -164,6 +221,18 @@ const EntryForm = ({ error, createEntry, hideForm }: {
 
   const changeDischargeCriteria = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDischargeCriteria(e.target.value);
+  };
+
+  const changeEmployerName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmployerName(e.target.value);
+  };
+
+  const changeSickLeaveStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSickLeaveStart(e.target.value);
+  };
+
+  const changeSickLeaveEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSickLeaveEnd(e.target.value);
   };
 
   const changeType = (e: SelectChangeEvent) => {
@@ -249,7 +318,15 @@ const EntryForm = ({ error, createEntry, hideForm }: {
             commonFieldProps={commonFieldProps}
           />}
 
-          {type === 'OccupationalHealthcare' && <p>OccupationalHealthcare</p>}
+          {type === 'OccupationalHealthcare' && <OccupationalHealthcareField 
+            employerName={employerName}
+            changeEmployerName={changeEmployerName}
+            sickLeaveStart={sickLeaveStart}
+            changeSickLeaveStart={changeSickLeaveStart}
+            sickLeaveEnd={sickLeaveEnd}
+            changeSickLeaveEnd={changeSickLeaveEnd}
+            commonFieldProps={commonFieldProps}
+          />}
 
           <TextField 
             name="codes" 
