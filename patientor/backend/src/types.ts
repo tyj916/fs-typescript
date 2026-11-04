@@ -23,32 +23,26 @@ const NewBaseEntrySchema = z.object({
   diagnosisCodes: z.array(DiagnosisCodeSchema).optional(),
 });
 
-const BaseEntrySchema = NewBaseEntrySchema.extend({
-  id: z.string()
-});
-
 const DischargeSchema = z.object({
   date: z.iso.date(),
   criteria: z.string()
 });
 
-export const HospitalEntrySchema = BaseEntrySchema.extend({
+export const NewHospitalEntrySchema = NewBaseEntrySchema.extend({
   type: z.literal('Hospital'),
   discharge: DischargeSchema,
 });
-export type HospitalEntry = z.infer<typeof HospitalEntrySchema>;
 
 const SickLeaveSchema = z.object({
   startDate: z.iso.date(),
   endDate: z.iso.date(),
 });
 
-export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
+export const NewOccupationalHealthcareEntrySchema = NewBaseEntrySchema.extend({
   type: z.literal("OccupationalHealthcare"),
   employerName: z.string(),
   sickLeave: SickLeaveSchema.optional(),
 });
-export type OccupationalHealthcareEntry = z.infer<typeof OccupationalHealthcareEntrySchema>;
 
 export const HealthCheckRating = {
   Healthy: 0,
@@ -58,7 +52,7 @@ export const HealthCheckRating = {
 } as const;
 type HealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating];
 
-export const HealthCheckEntrySchema = BaseEntrySchema.extend({
+export const NewHealthCheckEntrySchema = NewBaseEntrySchema.extend({
   type: z.literal("HealthCheck"),
   healthCheckRating: z.union([
     z.literal(HealthCheckRating.Healthy),
@@ -67,15 +61,17 @@ export const HealthCheckEntrySchema = BaseEntrySchema.extend({
     z.literal(HealthCheckRating.CriticalRisk),
   ])
 });
-export type HealthCheckEntry = z.infer<typeof HealthCheckEntrySchema>;
 
-export type Entry =
-  | HospitalEntry
-  | OccupationalHealthcareEntry
-  | HealthCheckEntry;
+export const NewEntrySchema = z.discriminatedUnion('type', [
+  NewHospitalEntrySchema,
+  NewOccupationalHealthcareEntrySchema,
+  NewHealthCheckEntrySchema,
+]);
+export type NewEntry = z.infer<typeof NewEntrySchema>;
 
-type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
-export type NewEntry = UnionOmit<Entry, 'id'>;
+export type Entry = NewEntry & {
+  id: string;
+};
 
 export const NewPatientSchema = z.object({
   name: z.string(),
