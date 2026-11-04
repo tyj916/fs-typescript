@@ -39,12 +39,18 @@ const addPatient = (patient: NewPatient): Patient => {
 const addEntry = (id: Patient['id'], entry: NewEntry): Entry => {
   const newEntry = {
     id: uuid(),
-    diagnosisCodes: entry.diagnosisCodes || [],
+    diagnosisCodes: entry.diagnosisCodes ?? [],
     ...entry,
   };
-  patients.map(patient => 
-    patient.id === id ? patient.entries = patient.entries.concat(newEntry) : patient
-  );
+
+  const patient = patients.find(patient => patient.id === id);
+  
+  if (!patient) {
+    throw new Error('Patient not found');
+  }
+  
+  patient.entries = patient.entries.concat(newEntry);
+
   return newEntry;
 };
 
