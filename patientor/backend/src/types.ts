@@ -16,37 +16,39 @@ export const DiagnosisSchema = z.object({
 });
 export type Diagnosis = z.infer<typeof DiagnosisSchema>;
 
-export const NewBaseEntrySchema = z.object({
+const NewBaseEntrySchema = z.object({
   date: z.iso.date(),
   description: z.string(),
   specialist: z.string(),
   diagnosisCodes: z.array(DiagnosisCodeSchema).optional(),
 });
-export type NewBaseEntry = z.infer<typeof NewBaseEntrySchema>;
-export interface BaseEntry extends NewBaseEntry {
-  id: string;
-}
 
-interface Discharge {
-  date: string;
-  criteria: string;
-}
+const BaseEntrySchema = NewBaseEntrySchema.extend({
+  id: z.string()
+});
 
-interface HospitalEntry extends BaseEntry {
-  type: "Hospital";
-  discharge: Discharge;
-}
+const DischargeSchema = z.object({
+  date: z.iso.date(),
+  criteria: z.string()
+});
 
-interface SickLeave {
-  startDate: string;
-  endDate: string;
-}
+export const HospitalEntrySchema = BaseEntrySchema.extend({
+  type: z.literal('Hospital'),
+  discharge: DischargeSchema,
+});
+export type HospitalEntry = z.infer<typeof HospitalEntrySchema>;
 
-interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
-  employerName: string;
-  sickLeave?: SickLeave;
-}
+const SickLeaveSchema = z.object({
+  startDate: z.iso.date(),
+  endDate: z.iso.date(),
+});
+
+export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
+  type: z.literal("OccupationalHealthcare"),
+  employerName: z.string(),
+  sickLeave: SickLeaveSchema.optional(),
+});
+export type OccupationalHealthcareEntry = z.infer<typeof OccupationalHealthcareEntrySchema>;
 
 export const HealthCheckRating = {
   Healthy: 0,
@@ -56,10 +58,16 @@ export const HealthCheckRating = {
 } as const;
 type HealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating];
 
-interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
-  healthCheckRating: HealthCheckRating;
-}
+export const HealthCheckEntrySchema = BaseEntrySchema.extend({
+  type: z.literal("HealthCheck"),
+  healthCheckRating: z.union([
+    z.literal(HealthCheckRating.Healthy),
+    z.literal(HealthCheckRating.LowRisk),
+    z.literal(HealthCheckRating.HighRisk),
+    z.literal(HealthCheckRating.CriticalRisk),
+  ])
+});
+export type HealthCheckEntry = z.infer<typeof HealthCheckEntrySchema>;
 
 export type Entry =
   | HospitalEntry
