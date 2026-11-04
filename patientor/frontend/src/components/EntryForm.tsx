@@ -110,8 +110,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
       diagnosisCodes,
     };
 
-    console.log('submit');
-
     switch (type) {
       case 'HealthCheck':
         const healthCheckRating = Number(rating);
@@ -119,8 +117,6 @@ const EntryForm = ({ error, createEntry, hideForm }: {
         if (!isHealthCheckRating(healthCheckRating)) {
           throw new Error('Invalid health check rating');
         }
-
-        console.log('here');
 
         createEntry({
           ...baseEntry,
